@@ -23,10 +23,10 @@ def find(x: list, y: list, weightsnum: int, trainnum: int, learning_rate: float)
 
         if not torch.isfinite(loss):
             print('non-finite loss, ending training')
-            learning_rate = learning_rate/10
+            learning_rate = learning_rate / 10
             print(f'next learning_rate = {learning_rate}')
             print('restarting...')
-            find(x,y,weightsnum,trainnum,learning_rate)
+            find(x, y, weightsnum, trainnum, learning_rate)
             exit(1)
 
         loss.backward()
