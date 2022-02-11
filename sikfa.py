@@ -39,5 +39,4 @@ def find(x: list, y: list, weightsnum: int, trainnum: int, learning_rate: float)
 
     print(f'loss = {loss.item()}')
 
-    for h in range(0, len(coefficient_list)):
-        print(f'{coefficient_list[h].item()}x^{h}')
+    return coefficient_list
