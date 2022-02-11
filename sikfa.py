@@ -6,8 +6,8 @@ device = torch.device('cpu')
 
 
 def find(x: list, y: list, weightsnum: int, trainnum: int, learning_rate: float):
-    x = torch.FloatTensor(x)
-    y = torch.FloatTensor(y)
+    x2 = torch.FloatTensor(x)
+    y2 = torch.FloatTensor(y)
 
     coefficient_list = []
     for i in range(0, weightsnum):
@@ -16,11 +16,19 @@ def find(x: list, y: list, weightsnum: int, trainnum: int, learning_rate: float)
     for k in range(trainnum):
         y_pred = 0
         for h in range(0, len(coefficient_list)):
-            y_pred += coefficient_list[h]*x**h
+            y_pred += coefficient_list[h] * x2 ** h
 
-        loss = (y_pred - y).pow(2).sum()
-        if k % 100 == 99:
-            print(k, loss.item())
+        loss = (y_pred - y2).pow(2).sum()
+        if k % 10000 == 9999:
+            print(k, loss)
+
+        if not torch.isfinite(loss):
+            print('non-finite loss, ending training')
+            learning_rate = learning_rate/10
+            print(f'next learning_rate = {learning_rate}')
+            print('restarting...')
+            find(x,y,weightsnum,trainnum,learning_rate)
+            exit(1)
 
         loss.backward()
 
@@ -29,6 +37,8 @@ def find(x: list, y: list, weightsnum: int, trainnum: int, learning_rate: float)
                 coefficient_list[h] -= learning_rate * coefficient_list[h].grad
 
                 coefficient_list[h].grad = None
+
+    print(f'loss = {loss}')
 
     for h in range(0, len(coefficient_list)):
         print(coefficient_list[h].item())
