@@ -5,7 +5,7 @@ with open('README.md', 'r') as f:
 
 setuptools.setup(
     name="sikfa",
-    version="0.0.4",
+    version="0.0.5",
     author="shi3do",
     author_email="shi3doemail@gmail.com",
     description="",
