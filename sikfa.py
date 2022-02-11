@@ -20,7 +20,7 @@ def find(x: list, y: list, weightsnum: int, trainnum: int, learning_rate: float)
 
         loss = (y_pred - y2).pow(2).sum()
         if k % 10000 == 9999:
-            print(k, loss)
+            print(k, loss.item())
 
         if not torch.isfinite(loss):
             print('non-finite loss, ending training')
@@ -38,7 +38,7 @@ def find(x: list, y: list, weightsnum: int, trainnum: int, learning_rate: float)
 
                 coefficient_list[h].grad = None
 
-    print(f'loss = {loss}')
+    print(f'loss = {loss.item()}')
 
     for h in range(0, len(coefficient_list)):
-        print(coefficient_list[h].item())
+        print(f'{coefficient_list[h].item()}x^{h}')
