@@ -1,7 +1,7 @@
 import torch
 
 dtype = torch.float
-device = torch.device('cpu')
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 
 def find(x: list, y: list, weightsnum: int, trainnum: int, learning_rate: float):
@@ -24,7 +24,10 @@ def find(x: list, y: list, weightsnum: int, trainnum: int, learning_rate: float)
         if not torch.isfinite(loss):
             print('non-finite loss, ending training')
             learning_rate = learning_rate / 10
+            trainnum = trainnum * 2
+            print(f'using {device}')
             print(f'next learning_rate = {learning_rate}')
+            print(f'next trainnum = {trainnum}')
             print('restarting...')
             find(x, y, weightsnum, trainnum, learning_rate)
             exit(1)
@@ -36,6 +39,17 @@ def find(x: list, y: list, weightsnum: int, trainnum: int, learning_rate: float)
                 coefficient_list[h] -= learning_rate * coefficient_list[h].grad
 
                 coefficient_list[h].grad = None
+
+    if loss > 100:
+        print('too-big loss, ending training')
+        learning_rate = learning_rate / 10
+        trainnum = trainnum*2
+        print(f'using {device}')
+        print(f'next learning_rate = {learning_rate}')
+        print(f'next trainnum = {trainnum}')
+        print('restarting...')
+        find(x, y, weightsnum, trainnum, learning_rate)
+        exit(1)
 
     print(f'loss = {loss.item()}')
 
