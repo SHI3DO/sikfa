@@ -3,8 +3,11 @@ import torch
 dtype = torch.float
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
+global loss
+
 
 def find(x: list, y: list, weightsnum: int, trainnum: int, learning_rate: float):
+    global loss
     x2 = torch.FloatTensor(x)
     y2 = torch.FloatTensor(y)
 
@@ -43,7 +46,7 @@ def find(x: list, y: list, weightsnum: int, trainnum: int, learning_rate: float)
     if loss > 100:
         print('too-big loss, ending training')
         learning_rate = learning_rate / 10
-        trainnum = trainnum*2
+        trainnum = trainnum * 2
         print(f'using {device}')
         print(f'next learning_rate = {learning_rate}')
         print(f'next trainnum = {trainnum}')
